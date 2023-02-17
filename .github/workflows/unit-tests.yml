@@ -17,6 +17,9 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Terraform Provider Install
+        run: terraform init -get-plugins
+
       - name: Terraform Plan
         run: terraform plan -out=terraform.tfplan
 
