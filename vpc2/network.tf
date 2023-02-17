@@ -1,23 +1,7 @@
-#resource "aws_vpc" "main" {
-#  cidr_block       = "10.20.0.0/16"
-#  instance_tenancy = "default"
-#
-#  tags = {
-#    Name = "terraform created"
-#  }
-#}
-#
-#resource "aws_internet_gateway" "gw" {
-#  depends_on = [
-#    aws_vpc.main,
-#  ]
-#
-#  vpc_id = aws_vpc.main.id
-#
-#  tags = {
-#    Name = "main"
-#  }
-#}
+provider "aws" {
+  profile = "demo2"
+  region  = "us-west-2"
+}
 
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr_block
@@ -129,15 +113,3 @@ variable "private_subnet_availability_zones" {
   description = "List of availability zones for private subnets"
   type        = list(string)
 }
-
-
-#variable "enable_nat_gateway" {
-#  description = "Whether to enable NAT gateway for private subnets"
-#  type        = bool
-#}
-#
-#variable "instance_type" {
-#  description = "The type of EC2 instance to launch for the NAT gateway"
-#  type        = string
-#  default     = "t3.micro"
-#}

@@ -1,3 +1,6 @@
+#aws_profile = "demo2"
+#aws_region  = "us-west-2"
+
 vpc_name = "terraform created"
 
 vpc_cidr_block = "10.0.0.0/24"
