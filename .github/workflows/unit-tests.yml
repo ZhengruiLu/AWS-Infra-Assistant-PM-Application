@@ -1,4 +1,4 @@
-name: terraform_test
+name: Unit Tests
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform-plan:
-    name: Terraform Plan and Unit Tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.head.ref == 'main' && github.event.pull_request.base.ref == 'main' }}
     steps:
