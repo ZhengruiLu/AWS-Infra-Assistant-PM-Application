@@ -6,9 +6,10 @@ on:
       - main
 
 jobs:
-  unit-tests:
-    name: Run unit tests
+  terraform-plan:
+    name: Terraform Plan and Unit Tests
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.head.ref == 'main' && github.event.pull_request.base.ref == 'main' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
