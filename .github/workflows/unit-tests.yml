@@ -1,15 +1,15 @@
 name: Unit Tests
 
+
 on:
   pull_request:
     branches:
       - main
 
 jobs:
-  terraform-plan:
+  unit-tests:
     name: Run unit tests
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.ref == 'main' && github.event.pull_request.base.ref == 'main' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
