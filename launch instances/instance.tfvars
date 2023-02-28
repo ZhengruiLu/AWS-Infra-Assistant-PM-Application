@@ -1,0 +1,7 @@
+aws_region                 = "us-west-1"
+vpc_id                     = "vpc-046f38d6af50c0d4d"
+subnet_id                  = "subnet-056176013fd13c73b"
+ami_id                     = "ami-01f8ec5184263cea5"
+key_pair_name              = "aws-demo-us-west-1"
+security_group_name_prefix = "mysg"
+bucket_name = "vpc-created-by-terraform-bucket-d1a50007"

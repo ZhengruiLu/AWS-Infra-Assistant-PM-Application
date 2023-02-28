@@ -1,6 +1,6 @@
 provider "aws" {
-  profile = "demo2"
-  region  = "us-west-2"
+  profile = var.aws_profile
+  region  = var.aws_region
 }
 
 resource "aws_vpc" "vpc" {
@@ -83,6 +83,36 @@ resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = aws_subnet.private_subnet[each.key].id
   route_table_id = aws_route_table.private_route_table.id
 }
+
+resource "random_id" "random_id" {
+  byte_length = 4
+}
+
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${var.vpc_name}-bucket-${random_id.random_id.hex}"
+}
+
+resource "aws_s3_object" "object" {
+  bucket = aws_s3_bucket.bucket.id
+  key    = "ProductManager-0.0.1-SNAPSHOT.jar"
+  source = "D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag = filemd5("D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar")
+}
+
+variable "aws_profile" {
+  description = "The AWS CLI profile to use"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "The AWS region to use"
+  type        = string
+}
+
 
 variable "vpc_name" {
   description = "Name of the VPC"
