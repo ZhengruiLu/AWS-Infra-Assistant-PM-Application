@@ -88,20 +88,20 @@ resource "random_id" "random_id" {
   byte_length = 4
 }
 
-resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.vpc_name}-bucket-${random_id.random_id.hex}"
-}
+#resource "aws_s3_bucket" "bucket" {
+#  bucket = "${var.vpc_name}-bucket-${random_id.random_id.hex}"
+#}
 
-resource "aws_s3_object" "object" {
-  bucket = aws_s3_bucket.bucket.id
-  key    = "ProductManager-0.0.1-SNAPSHOT.jar"
-  source = "D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar"
-
-  # The filemd5() function is available in Terraform 0.11.12 and later
-  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
-  # etag = "${md5(file("path/to/file"))}"
-  etag = filemd5("D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar")
-}
+#resource "aws_s3_object" "object" {
+#  bucket = aws_s3_bucket.bucket.id
+#  key    = "ProductManager-0.0.1-SNAPSHOT.jar"
+#  source = "D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar"
+#
+#  # The filemd5() function is available in Terraform 0.11.12 and later
+#  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+#  # etag = "${md5(file("path/to/file"))}"
+#  etag = filemd5("D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar")
+#}
 
 variable "aws_profile" {
   description = "The AWS CLI profile to use"
