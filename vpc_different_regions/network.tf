@@ -1,3 +1,43 @@
+variable "aws_profile" {
+  description = "The AWS CLI profile to use"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "The AWS region to use"
+  type        = string
+}
+
+variable "vpc_name" {
+  description = "Name of the VPC"
+  type        = string
+}
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for the VPC"
+  type        = string
+}
+
+variable "public_subnet_cidr_blocks" {
+  description = "List of public subnet CIDR blocks"
+  type        = list(string)
+}
+
+variable "private_subnet_cidr_blocks" {
+  description = "List of private subnet CIDR blocks"
+  type        = list(string)
+}
+
+variable "public_subnet_availability_zones" {
+  description = "List of availability zones for public subnets"
+  type        = list(string)
+}
+
+variable "private_subnet_availability_zones" {
+  description = "List of availability zones for private subnets"
+  type        = list(string)
+}
+
 provider "aws" {
   profile = var.aws_profile
   region  = var.aws_region
@@ -34,7 +74,6 @@ resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_cidr_blocks[count.index]
   availability_zone = var.private_subnet_availability_zones[count.index]
-
 
   tags = {
     Name = "${var.vpc_name}-private-subnet-${count.index + 1}"
@@ -88,58 +127,51 @@ resource "random_id" "random_id" {
   byte_length = 4
 }
 
-#resource "aws_s3_bucket" "bucket" {
-#  bucket = "${var.vpc_name}-bucket-${random_id.random_id.hex}"
-#}
-
-#resource "aws_s3_object" "object" {
-#  bucket = aws_s3_bucket.bucket.id
-#  key    = "ProductManager-0.0.1-SNAPSHOT.jar"
-#  source = "D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar"
-#
-#  # The filemd5() function is available in Terraform 0.11.12 and later
-#  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
-#  # etag = "${md5(file("path/to/file"))}"
-#  etag = filemd5("D:/Project/network-structure-and-cloud-computing/a04-webapp/webapp/ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar")
-#}
-
-variable "aws_profile" {
-  description = "The AWS CLI profile to use"
-  type        = string
+resource "aws_kms_key" "sse_kms_key" {
+  description         = "KMS key for S3 server-side encryption"
+  enable_key_rotation = true
 }
 
-variable "aws_region" {
-  description = "The AWS region to use"
-  type        = string
+# Create a private S3 bucket with a randomly generated bucket name depending on the environment
+resource "aws_s3_bucket" "private_bucket" {
+  bucket = "${terraform.workspace}-bucket-${random_id.random_id.hex}"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.sse_kms_key.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
+
+  force_destroy = true
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "lifecycle_configuration" {
+  bucket = aws_s3_bucket.private_bucket.id
 
-variable "vpc_name" {
-  description = "Name of the VPC"
-  type        = string
+  rule {
+    id     = "lifecycle_configuration_rule"
+    status = "Enabled"
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    filter {
+      prefix = ""
+    }
+  }
 }
 
-variable "vpc_cidr_block" {
-  description = "CIDR block for the VPC"
-  type        = string
-}
-
-variable "public_subnet_cidr_blocks" {
-  description = "List of public subnet CIDR blocks"
-  type        = list(string)
-}
-
-variable "private_subnet_cidr_blocks" {
-  description = "List of private subnet CIDR blocks"
-  type        = list(string)
-}
-
-variable "public_subnet_availability_zones" {
-  description = "List of availability zones for public subnets"
-  type        = list(string)
-}
-
-variable "private_subnet_availability_zones" {
-  description = "List of availability zones for private subnets"
-  type        = list(string)
-}

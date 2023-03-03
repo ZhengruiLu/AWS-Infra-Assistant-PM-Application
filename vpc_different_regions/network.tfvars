@@ -1,4 +1,4 @@
-aws_profile = "demo2"
+aws_profile = "demo-S3"
 aws_region  = "us-west-1"
 
 vpc_name = "vpc-created-by-terraform"
