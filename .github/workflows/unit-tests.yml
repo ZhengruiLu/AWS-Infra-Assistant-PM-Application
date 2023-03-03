@@ -1,13 +1,11 @@
-name: Unit Tests
+name: unit-tests
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  unit-tests:
-    name: Run unit tests
+  terraform-init:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

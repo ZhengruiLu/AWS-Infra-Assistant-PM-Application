@@ -16,7 +16,7 @@ variable "subnet_id" {}
 variable "ami_id" {}
 variable "key_pair_name" {}
 variable "security_group_name_prefix" {}
-variable "bucket_name" {}
+#variable "bucket_name" {}
 
 # Create an application security group
 resource "aws_security_group" "app" {
@@ -30,26 +30,6 @@ resource "aws_security_group" "app" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   egress {
     from_port   = 0
@@ -77,22 +57,4 @@ resource "aws_instance" "my_ec2_instance" {
     delete_on_termination = true
   }
 
-  # Restart the MariaDB service on reboot
-  user_data = <<-EOF
-              #!/bin/bash
-              # Set the bucket name
-              export BUCKET_NAME=bucket_name
-
-              # Install the AWS CLI
-              apt-get update
-              apt-get install -y awscli
-
-              # Create a directory and download the jar from S3
-              mkdir /data
-              aws s3 cp s3://${BUCKET_NAME}/ProductManager-0.0.1-SNAPSHOT.jar /data/
-
-              # Run the Maven project
-              cd /data
-              mvn spring-boot:run
-              EOF
 }
