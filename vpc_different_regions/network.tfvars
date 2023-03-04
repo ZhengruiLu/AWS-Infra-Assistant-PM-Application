@@ -13,18 +13,18 @@ public_subnet_cidr_blocks = [
 
 private_subnet_cidr_blocks = [
   "10.1.10.0/24",
-  #  "10.1.11.0/24",
-  #  "10.1.12.0/24"
+  "10.1.11.0/24",
+  "10.1.12.0/24"
 ]
 
 public_subnet_availability_zones = [
   "us-west-1a",
-  #  "us-east-1c",
-  #  "us-east-1d"
+  #    "us-west-1c",
+  #    "us-west-1d"
 ]
 
 private_subnet_availability_zones = [
   "us-west-1a",
-  #  "us-east-1c",
-  #  "us-east-1d"
+  "us-west-1c",
+  "us-west-1c",
 ]
