@@ -152,7 +152,28 @@ data "template_file" "user_data" {
               export S3_BUCKET_NAME=${var.s3_bucket_name}
 
               # Install required software, clone your application code from Git, etc.
-              # ...
+              sudo yum update -y
+              sudo yum install -y java-1.8.0-openjdk-devel
+              sudo yum install -y maven
+              sudo yum install -y git
+              git clone git@github.com:ZhengruiLu/webapp.git
+
+              # Build the application
+              cd ./ProductManager
+              mvn clean install
+
+              # Move the JAR file to deployment directory
+              sudo mkdir /opt/deployment
+              sudo cp ./ProductManager/target/ProductManager-0.0.1-SNAPSHOT.jar /opt/deployment/
+              sudo chown -R $USER:$USER /opt/deployment
+
+              # Create systemd service file
+              sudo cp ./scripts/ProductManager.service /etc/systemd/system/
+              sudo systemctl daemon-reload
+              sudo systemctl enable ProductManager.service
+              sudo systemctl start ProductManager.service
+              sudo systemctl status ProductManager.service
+
               EOF
 }
 
