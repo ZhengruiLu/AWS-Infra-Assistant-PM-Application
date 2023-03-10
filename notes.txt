@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "" > /opt/app/application.properties
+
+echo "spring.jpa.hibernate.ddl-auto=update" > /opt/app/application.properties
+echo "spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/db_example" >> /opt/app/application.properties
+
+chown -R $USER:$USER  /opt/app/application.properties
+
+sudo systemctl restart ProductManager.service
