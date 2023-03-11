@@ -1,4 +1,3 @@
-# part1 create vpc and its subnets
 variable "aws_profile" {
   description = "The AWS CLI profile to use"
   type        = string

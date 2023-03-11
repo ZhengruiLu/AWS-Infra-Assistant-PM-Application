@@ -1,4 +1,4 @@
-# 2.3 RDS Parameter Group
+#6. RDS Parameter Group
 resource "aws_db_parameter_group" "db_parameter_group" {
   name   = "my-rds-pg"
   family = "mariadb10.5"
@@ -20,18 +20,34 @@ resource "aws_db_parameter_group" "db_parameter_group" {
 
 # 2.4 RDS Instance
 resource "aws_db_instance" "db_instance" {
-  engine                 = "mariadb"
-  engine_version         = "10.5"
+  allocated_storage      = 10
+  db_name = "csye6225"
+  engine               = "mysql"
+  engine_version       = "5.7"
+#  engine                 = "mariadb"
+#  engine_version         = "10.5"
   instance_class         = "db.t2.micro"
   multi_az               = false
   identifier             = "csye6225"
-  username               = "csye6225"
-  password               = "password"
+  username               = "user"
+  password               = "password@1"
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   parameter_group_name   = aws_db_parameter_group.db_parameter_group.name
   skip_final_snapshot    = true
   publicly_accessible    = false
   apply_immediately      = true
-  allocated_storage      = 20
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
 }
+
+
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name        = "rds-subnet-group"
+  description = "Subnet group for RDS instances"
+
+  subnet_ids = [for subnet in aws_subnet.private_subnet : subnet.id]
+
+  tags = {
+    Name = "My DB subnet group"
+  }
+}
+

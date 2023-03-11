@@ -1,4 +1,13 @@
 # 2.2 Create a private S3 bucket with a randomly generated bucket name depending on the environment
+resource "random_id" "random_id" {
+  byte_length = 4
+}
+
+resource "aws_kms_key" "sse_kms_key" {
+  description         = "KMS key for S3 server-side encryption"
+  enable_key_rotation = true
+}
+
 resource "aws_s3_bucket" "private_bucket" {
   bucket = "${terraform.workspace}-bucket-${random_id.random_id.hex}"
   acl    = "private"
