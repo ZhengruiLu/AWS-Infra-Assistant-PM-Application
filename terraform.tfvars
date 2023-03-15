@@ -30,5 +30,5 @@ private_subnet_availability_zones = [
 ]
 
 security_group_name_prefix = "mysg"
-ami_id                     = "ami-02a077df51ad58f46"
+ami_id                     = "ami-0dd5e17ad28f11caa"
 key_pair_name              = "aws-demo-us-west-1"

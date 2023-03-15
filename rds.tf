@@ -20,17 +20,16 @@ resource "aws_db_parameter_group" "db_parameter_group" {
 
 # 2.4 RDS Instance
 resource "aws_db_instance" "db_instance" {
-  allocated_storage      = 10
-  db_name = "csye6225"
-  engine               = "mysql"
-  engine_version       = "5.7"
-#  engine                 = "mariadb"
-#  engine_version         = "10.5"
+  port = 3306
+  allocated_storage = 10
+  db_name           = "csye6225"
+  engine                 = "mariadb"
+  engine_version         = "10.5"
   instance_class         = "db.t2.micro"
   multi_az               = false
   identifier             = "csye6225"
-  username               = "user"
-  password               = "password@1"
+  username               = "ec2-user"
+  password               = "password"
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   parameter_group_name   = aws_db_parameter_group.db_parameter_group.name
   skip_final_snapshot    = true

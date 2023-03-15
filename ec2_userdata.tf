@@ -2,14 +2,13 @@ data "template_file" "user_data" {
   template = <<-EOF
               #!/bin/bash
 
-              echo "" > /opt/app/application.properties
+              echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.endpoint}/csye6225" >> /opt/app/application.properties
+              echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
 
-              echo "spring.jpa.hibernate.ddl-auto=update" > /opt/app/application.properties
-              echo "spring.datasource.url=jdbc:mysql://${aws_db_instance.db_instance.endpoint}:3306/csye6225" >> /opt/app/application.properties
+              chown -R ec2-user:ec2-user /opt/app
+              chmod -R 555 /opt/app
 
-              chown -R $USER:$USER  /opt/app/application.properties
-
-              sudo systemctl restart ProductManager.service
+              systemctl restart ProductManager.service
               EOF
 }
 
