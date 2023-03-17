@@ -4,6 +4,9 @@ data "template_file" "user_data" {
 
               echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.endpoint}/csye6225" >> /opt/app/application.properties
               echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
+              echo "spring.jpa.hibernate.ddl-auto=update" > /opt/app/application.properties
+              echo "spring.datasource.username=root" > /opt/app/application.properties
+              echo "spring.datasource.password=password" > /opt/app/application.properties
 
               chown -R ec2-user:ec2-user /opt/app
               chmod -R 555 /opt/app

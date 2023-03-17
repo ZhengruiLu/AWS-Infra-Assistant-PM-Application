@@ -41,3 +41,13 @@ variable "private_subnet_availability_zones" {
 variable "security_group_name_prefix" {}
 variable "ami_id" {}
 variable "key_pair_name" {}
+
+variable "zone_name" {
+  description = "Name of the Route53 zone"
+  default     = null
+}
+
+variable "port" {
+  description = "Port on which the web application is running"
+  default     = 80
+}
