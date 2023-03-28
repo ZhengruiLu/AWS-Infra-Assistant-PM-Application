@@ -28,7 +28,7 @@ resource "aws_db_instance" "db_instance" {
   instance_class         = "db.t2.micro"
   multi_az               = false
   identifier             = "csye6225"
-  username               = "root"
+  username               = "csye6225"
   password               = "password"
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   parameter_group_name   = aws_db_parameter_group.db_parameter_group.name
