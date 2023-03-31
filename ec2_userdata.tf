@@ -4,19 +4,18 @@ data "template_file" "user_data" {
 
               echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.endpoint}/csye6225" >> /opt/app/application.properties
               echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
-              echo "spring.jpa.hibernate.ddl-auto=update" > /opt/app/application.properties
-              echo "spring.datasource.username=${aws_db_instance.db_instance.username}" > /opt/app/application.properties
-              echo "spring.datasource.password=${aws_db_instance.db_instance.password}" > /opt/app/application.properties
+              echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/app/application.properties
+              echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> /opt/app/application.properties
+              echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> /opt/app/application.properties
 
               sudo chown -R ec2-user:ec2-user /opt/app
               sudo chmod -R 555 /opt/app
-              sudo chown -R ec2-user:ec2-user /etc/systemd/system/ProductManager.service
-              sudo chmod 555 /etc/systemd/system/ProductManager.service
+              sudo chown -R ec2-user:ec2-user /opt/app/application.properties
+
 
               systemctl restart ProductManager.service
               EOF
 }
-
 
 # Create the EC2 instance
 resource "aws_instance" "my_ec2_instance" {
