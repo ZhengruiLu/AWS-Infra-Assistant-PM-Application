@@ -2,10 +2,6 @@ data "template_file" "user_data" {
   template = <<-EOF
               #!/bin/bash
 
-              sudo chown -R ec2-user:ec2-user /opt/
-              sudo chmod -R 755 /opt/
-
-              sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/cloudwatch-config.json -s
 
               systemctl restart ProductManager.service
               EOF
