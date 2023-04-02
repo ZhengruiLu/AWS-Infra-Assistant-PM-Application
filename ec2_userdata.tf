@@ -1,14 +1,12 @@
 data "template_file" "user_data" {
   template = <<-EOF
               #!/bin/bash
-              echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.endpoint}/csye6225" >> /opt/app/application.properties
-              echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
-              echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/app/application.properties
-              echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> /opt/app/application.properties
-              echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> /opt/app/application.properties
 
               sudo chown -R ec2-user:ec2-user /opt/
               sudo chmod -R 755 /opt/
+
+              sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/cloudwatch-config.json -s
+
               systemctl restart ProductManager.service
               EOF
 }

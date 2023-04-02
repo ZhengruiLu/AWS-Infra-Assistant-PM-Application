@@ -30,7 +30,7 @@ private_subnet_availability_zones = [
 ]
 
 security_group_name_prefix = "mysg"
-ami_id                     = "ami-0a2bad1cf59c715cb"
+ami_id                     = "ami-05dc5fea0cb484d37"
 key_pair_name              = "aws-demo-us-west-1"
 zone_name                  = "demo.zltech.me"
 port                       = 80
