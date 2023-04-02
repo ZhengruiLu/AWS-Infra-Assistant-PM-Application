@@ -6,7 +6,6 @@ data "template_file" "user_data" {
               echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/app/application.properties
               echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> /opt/app/application.properties
               echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> /opt/app/application.properties
-              echo "ExecStart=/usr/bin/java -jar /opt/app/ProductManager.jar -Dspring.config.additional-location=/opt/app/application.properties" > /etc/systemd/system/ProductManager.service
 
               sudo chown -R ec2-user:ec2-user /opt/
               sudo chmod -R 755 /opt/
@@ -23,7 +22,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 resource "aws_instance" "my_ec2_instance" {
   for_each = { for idx, subnet in aws_subnet.public_subnet : idx => subnet }
 
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
   ami                    = var.ami_id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.app_security_group.id]
