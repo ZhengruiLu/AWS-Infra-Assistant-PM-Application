@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - modify-a05
+      - a06-aws-infra
 
 jobs:
   terraform-init:

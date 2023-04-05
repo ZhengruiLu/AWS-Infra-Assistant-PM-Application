@@ -1,7 +1,7 @@
 aws_profile = "demo-S3"
 aws_region  = "us-west-1"
 
-vpc_name = "a06-vpc-created-by-terraform"
+vpc_name = "a05-vpc-created-by-terraform"
 
 vpc_cidr_block = "10.1.0.0/16"
 
@@ -30,7 +30,7 @@ private_subnet_availability_zones = [
 ]
 
 security_group_name_prefix = "mysg"
-ami_id                     = "ami-0f98ab1cb95f1eafd"
+ami_id                     = "ami-0f090384c2184b264"
 key_pair_name              = "aws-demo-us-west-1"
 zone_name                  = "demo.zltech.me"
 port                       = 80
