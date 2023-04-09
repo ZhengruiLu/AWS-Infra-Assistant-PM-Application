@@ -1,25 +1,21 @@
 data "template_file" "user_data" {
   template = <<-EOF
 #!/bin/bash
+systemctl stop ProductManager.service
+
+echo "server.port=8080" > /opt/app/application.properties
+echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.address}:${aws_db_instance.db_instance.port}/csye6225" >> /opt/app/application.properties
+echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
+echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/app/application.properties
+echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> /opt/app/application.properties
+echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> /opt/app/application.properties
+echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> /opt/app/application.properties
 
 chown -R ec2-user:ec2-user /opt/app
 chmod -R 755 /opt/app
 
-chown -R ec2-user:ec2-user /etc/systemd/system
-chmod -R 755 /etc/systemd/system
-
-cd /opt/app
-
-touch application.properties
-echo "server.port=8080" >> /opt/app/application.properties
-
-echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.address}:${aws_db_instance.db_instance.port}/csye6225" >> application.properties
-echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> application.properties
-echo "spring.jpa.hibernate.ddl-auto=update" >> application.properties
-echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> application.properties
-echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> application.properties
-
-systemctl restart ProductManager.service
+systemctl start ProductManager.service
+systemctl enable ProductManager.service
 
 EOF
 }
