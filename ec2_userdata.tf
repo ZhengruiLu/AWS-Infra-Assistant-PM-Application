@@ -1,10 +1,22 @@
 data "template_file" "user_data" {
   template = <<-EOF
-              #!/bin/bash
+#!/bin/bash
+systemctl stop ProductManager.service
 
+echo "server.port=8080" > /opt/app/application.properties
+echo "spring.datasource.url=jdbc:mariadb://${aws_db_instance.db_instance.address}:${aws_db_instance.db_instance.port}/csye6225" >> /opt/app/application.properties
+echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB103Dialect" >> /opt/app/application.properties
+echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/app/application.properties
+echo "spring.datasource.username=${aws_db_instance.db_instance.username}" >> /opt/app/application.properties
+echo "spring.datasource.password=${aws_db_instance.db_instance.password}" >> /opt/app/application.properties
+echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> /opt/app/application.properties
 
-              systemctl restart ProductManager.service
-              EOF
+sudo chown -R ec2-user:ec2-user /opt/app
+sudo chmod -R 755 /opt/app
+
+systemctl start ProductManager.service
+systemctl enable ProductManager.service
+EOF
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
