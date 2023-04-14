@@ -1,21 +1,35 @@
 #1. variables
 #2. networking
+
+
+
 #3. Create an application security group
 resource "aws_security_group" "app_security_group" {
   name_prefix = var.security_group_name_prefix
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 65535
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [
+      aws_security_group.lb_security_group.id
+    ]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups = [
+      aws_security_group.lb_security_group.id
+    ]
   }
 
   egress {
     from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -46,6 +60,35 @@ resource "aws_security_group" "db_security_group" {
 
   tags = {
     Name = "DB Security Group"
+  }
+}
+
+# Create a load balancer security group
+resource "aws_security_group" "lb_security_group" {
+  name_prefix = "lb-"
+
+  ingress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "Load Balancer Security Group"
   }
 }
 
