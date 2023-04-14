@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - a07
+      - a08
 
 jobs:
   terraform-init:
