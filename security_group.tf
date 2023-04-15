@@ -12,18 +12,16 @@ resource "aws_security_group" "app_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    security_groups = [
-      aws_security_group.lb_security_group.id
-    ]
+    cidr_blocks = [var.vpc_cidr_block]
+    security_groups = [aws_security_group.lb_security_group.id]
   }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
-    security_groups = [
-      aws_security_group.lb_security_group.id
-    ]
+    cidr_blocks = [var.vpc_cidr_block]
+    security_groups = [aws_security_group.lb_security_group.id]
   }
 
   egress {
@@ -84,6 +82,13 @@ resource "aws_security_group" "lb_security_group" {
       "0.0.0.0/0"
     ]
   }
+
+#  egress {
+#    from_port       = 8080
+#    to_port         = 8080
+#    protocol        = "tcp"
+#    security_groups = [aws_security_group.app_security_group.id]
+#  }
 
   vpc_id = aws_vpc.vpc.id
 
