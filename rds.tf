@@ -25,7 +25,7 @@ resource "aws_db_instance" "db_instance" {
   db_name                = "csye6225"
   engine                 = "mariadb"
   engine_version         = "10.5"
-  instance_class         = "db.t2.micro"
+  instance_class         = "db.t3.micro"
   multi_az               = false
   identifier             = "csye6225"
   username               = "csye6225"
@@ -36,6 +36,8 @@ resource "aws_db_instance" "db_instance" {
   publicly_accessible    = false
   apply_immediately      = true
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
+  kms_key_id             = aws_kms_key.kms_key_rds.arn
+  storage_encrypted = true
 }
 
 

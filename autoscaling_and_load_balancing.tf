@@ -30,6 +30,8 @@ resource "aws_launch_template" "asg_launch_config" {
       delete_on_termination = true
       volume_size           = 8
       volume_type           = "gp2"
+      encrypted             = "true"
+      kms_key_id            = aws_kms_key.kms_key_ebs.arn
     }
   }
 
@@ -173,9 +175,13 @@ resource "aws_lb_target_group" "alb_tg" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.lb.arn
-  port              = 80
-  protocol          = "HTTP"
-  #  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn = var.kms_arn
+
+  #  port              = 80
+  #  protocol          = "HTTP"
+    ssl_policy        = "ELBSecurityPolicy-2016-08"
   #  certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
@@ -183,3 +189,30 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.alb_tg.arn
   }
 }
+
+#resource "aws_lb_listener" "http" {
+#  load_balancer_arn = aws_lb.lb.arn
+#  port              = "80"
+#  protocol          = "HTTP"
+#
+#  default_action {
+#    type = "redirect"
+#
+#    redirect {
+#      port        = "443"
+#      protocol    = "HTTPS"
+#      status_code = "HTTP_301"
+#    }
+#  }
+#}
+
+#add certificate
+#data "aws_acm_certificate" "acm_certificate" {
+#  domain   = "demo.zltech.me"
+#  statuses = ["ISSUED"]
+#}
+
+#resource "aws_lb_listener_certificate" "listener_certificate" {
+#  listener_arn    = aws_lb_listener.front_end.arn
+#  certificate_arn = data.aws_acm_certificate.acm_certificate.arn
+#}
