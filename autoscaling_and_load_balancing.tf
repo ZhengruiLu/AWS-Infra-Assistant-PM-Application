@@ -31,7 +31,7 @@ resource "aws_launch_template" "asg_launch_config" {
       volume_size           = 8
       volume_type           = "gp2"
       encrypted             = "true"
-      kms_key_id            = aws_kms_key.kms_key.arn
+      kms_key_id            = aws_kms_key.kms_key_ebs.arn
     }
   }
 
@@ -177,9 +177,11 @@ resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.lb.arn
   port              = 443
   protocol          = "HTTPS"
+  certificate_arn = var.kms_arn
+
   #  port              = 80
   #  protocol          = "HTTP"
-  #  ssl_policy        = "ELBSecurityPolicy-2016-08"
+    ssl_policy        = "ELBSecurityPolicy-2016-08"
   #  certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
@@ -188,13 +190,29 @@ resource "aws_lb_listener" "front_end" {
   }
 }
 
-#add certificate
-data "aws_acm_certificate" "acm_certificate" {
-  domain   = "demo.zltech.me"
-  statuses = ["ISSUED"]
-}
+#resource "aws_lb_listener" "http" {
+#  load_balancer_arn = aws_lb.lb.arn
+#  port              = "80"
+#  protocol          = "HTTP"
+#
+#  default_action {
+#    type = "redirect"
+#
+#    redirect {
+#      port        = "443"
+#      protocol    = "HTTPS"
+#      status_code = "HTTP_301"
+#    }
+#  }
+#}
 
-resource "aws_lb_listener_certificate" "listener_certificate" {
-  listener_arn    = aws_lb_listener.front_end.arn
-  certificate_arn = data.aws_acm_certificate.acm_certificate.arn
-}
+#add certificate
+#data "aws_acm_certificate" "acm_certificate" {
+#  domain   = "demo.zltech.me"
+#  statuses = ["ISSUED"]
+#}
+
+#resource "aws_lb_listener_certificate" "listener_certificate" {
+#  listener_arn    = aws_lb_listener.front_end.arn
+#  certificate_arn = data.aws_acm_certificate.acm_certificate.arn
+#}

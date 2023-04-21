@@ -51,3 +51,7 @@ variable "port" {
   description = "Port on which the web application is running"
   default     = 80
 }
+
+variable "kms_arn" {
+
+}

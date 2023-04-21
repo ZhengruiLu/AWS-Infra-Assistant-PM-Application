@@ -36,7 +36,7 @@ resource "aws_db_instance" "db_instance" {
   publicly_accessible    = false
   apply_immediately      = true
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
-  kms_key_id             = aws_kms_key.kms_key.arn
+  kms_key_id             = aws_kms_key.kms_key_rds.arn
   storage_encrypted = true
 }
 

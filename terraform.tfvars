@@ -34,3 +34,5 @@ ami_id                     = "ami-0cf6aa773b0cd4047"
 key_pair_name              = "aws-demo-us-west-1"
 zone_name                  = "demo.zltech.me"
 port                       = 8080
+
+kms_arn = "arn:aws:acm:us-west-1:859583877906:certificate/53edbcb4-4cbd-4809-9160-d0da5f52a9e5"

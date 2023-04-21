@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - a08
+      - a09
 
 jobs:
   terraform-init:
