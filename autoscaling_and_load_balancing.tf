@@ -30,6 +30,8 @@ resource "aws_launch_template" "asg_launch_config" {
       delete_on_termination = true
       volume_size           = 8
       volume_type           = "gp2"
+      encrypted             = "true"
+      kms_key_id            = aws_kms_key.kms_key.arn
     }
   }
 
@@ -173,8 +175,10 @@ resource "aws_lb_target_group" "alb_tg" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.lb.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  #  port              = 80
+  #  protocol          = "HTTP"
   #  ssl_policy        = "ELBSecurityPolicy-2016-08"
   #  certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
@@ -182,4 +186,15 @@ resource "aws_lb_listener" "front_end" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb_tg.arn
   }
+}
+
+#add certificate
+data "aws_acm_certificate" "acm_certificate" {
+  domain   = "demo.zltech.me"
+  statuses = ["ISSUED"]
+}
+
+resource "aws_lb_listener_certificate" "listener_certificate" {
+  listener_arn    = aws_lb_listener.front_end.arn
+  certificate_arn = data.aws_acm_certificate.acm_certificate.arn
 }

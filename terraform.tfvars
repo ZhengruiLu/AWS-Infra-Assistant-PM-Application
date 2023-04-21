@@ -1,14 +1,14 @@
 aws_profile = "demo-S3"
 aws_region  = "us-west-1"
 
-vpc_name = "a06-vpc-created-by-terraform"
+vpc_name = "a09-vpc-created-by-terraform"
 
 vpc_cidr_block = "10.1.0.0/16"
 
 public_subnet_cidr_blocks = [
   "10.1.0.0/24",
   "10.1.1.0/24",
-#  "10.1.2.0/24"
+  #  "10.1.2.0/24"
 ]
 
 private_subnet_cidr_blocks = [
@@ -20,7 +20,7 @@ private_subnet_cidr_blocks = [
 public_subnet_availability_zones = [
   "us-west-1a",
   "us-west-1c",
-#  "us-west-1c"
+  #  "us-west-1c"
 ]
 
 private_subnet_availability_zones = [
