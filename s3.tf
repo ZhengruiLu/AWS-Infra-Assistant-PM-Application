@@ -3,23 +3,23 @@ resource "random_id" "random_id" {
   byte_length = 4
 }
 
-#resource "aws_kms_key" "sse_kms_key" {
-#  description         = "KMS key for S3 server-side encryption"
-#  enable_key_rotation = true
-#}
+resource "aws_kms_key" "sse_kms_key" {
+  description         = "KMS key for S3 server-side encryption"
+  enable_key_rotation = true
+}
 
 resource "aws_s3_bucket" "private_bucket" {
   bucket = "${terraform.workspace}-bucket-${random_id.random_id.hex}"
   acl    = "private"
 
-  #  server_side_encryption_configuration {
-  #    rule {
-  #      apply_server_side_encryption_by_default {
-  #        kms_master_key_id = aws_kms_key.sse_kms_key.arn
-  #        sse_algorithm     = "aws:kms"
-  #      }
-  #    }
-  #  }
+    server_side_encryption_configuration {
+      rule {
+        apply_server_side_encryption_by_default {
+          kms_master_key_id = aws_kms_key.sse_kms_key.arn
+          sse_algorithm     = "aws:kms"
+        }
+      }
+    }
 
   versioning {
     enabled = true
