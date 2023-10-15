@@ -2,6 +2,8 @@
 
 **Web Application - Infrastructure as Code** is a project which deploys applications by launching the AMI using Amazon Linux 2 via **Packer**, setup autorun using **Systemd**, and using **Terraform** configuration file to create all AWS resources needed.
 
+Prerequisite: The Product Management Application, which provides a secure application for managing user accounts and products info. Implemented authentication, user account management, and product-related functionalities using **Java** and **Sprint Boot**, link: https://github.com/ZhengruiLu/Product-Management-Application.
+
 Submitted by: **Zhengrui Lu**
 
 Time spent: **80** hours spent in total
